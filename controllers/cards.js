@@ -1,9 +1,10 @@
 const Card = require('../models/card');
 
 const {
-  ERROR_CODE,
+  ERROR_CODES,
   NOT_FOUND,
   ERROR_DEFAULT,
+  ERROR_CREATED,
 } = require('../utils/error');
 
 module.exports.getCards = (req, res) => {
@@ -17,12 +18,12 @@ module.exports.createCard = (req, res) => {
   const owner = req.user._id;
 
   Card.create({ name, link, owner })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.status(ERROR_CREATED).send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(ERROR_CODE).send({ message: `Переданы некорректные данные ${err.message}` });
+        return res.status(ERROR_CODES).send({ message: `Переданы некорректные данные ${err.message}` });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
+      res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -34,13 +35,13 @@ module.exports.deleteCard = (req, res) => {
       if (!card) {
         return res.status(NOT_FOUND).send({ message: 'Запрашиваемая карточка не найдена' });
       }
-      return res.send({ message: card });
+      res.send({ message: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(ERROR_CODE).send({ message: 'Некорректные данные' });
+        return res.status(ERROR_CODES).send({ message: 'Некорректные данные' });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'Ошибка сервера' });
+      res.status(ERROR_DEFAULT).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -50,13 +51,13 @@ module.exports.likeCard = (req, res) => {
       if (!cardData) {
         return res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
-      return res.send({ data: cardData });
+      res.send({ data: cardData });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(ERROR_CODE).send({ message: 'Некорректные данные' });
+        return res.status(ERROR_CODES).send({ message: 'Некорректные данные' });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'Ошибка сервера' });
+      res.status(ERROR_DEFAULT).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -66,12 +67,12 @@ module.exports.dislikeCard = (req, res) => {
       if (!cardData) {
         return res.status(NOT_FOUND).send({ message: 'Карточка не найдена' });
       }
-      return res.send({ data: cardData });
+      res.send({ data: cardData });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(ERROR_CODE).send({ message: 'Некорректные данные' });
+        return res.status(ERROR_CODES).send({ message: 'Некорректные данные' });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'Ошибка сервера' });
+      res.status(ERROR_DEFAULT).send({ message: 'Ошибка сервера' });
     });
 };

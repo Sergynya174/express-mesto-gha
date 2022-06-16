@@ -1,9 +1,11 @@
-const ERROR_CODE = 400;
+const ERROR_CODES = 400;
 const NOT_FOUND = 404;
 const ERROR_DEFAULT = 500;
+const ERROR_CREATED = 201;
 
 module.exports = {
-  ERROR_CODE,
+  ERROR_CODES,
   NOT_FOUND,
   ERROR_DEFAULT,
+  ERROR_CREATED,
 };

@@ -1,9 +1,10 @@
 const User = require('../models/user');
 
 const {
-  ERROR_CODE,
+  ERROR_CODES,
   NOT_FOUND,
   ERROR_DEFAULT,
+  ERROR_CREATED,
 } = require('../utils/error');
 
 module.exports.getUsers = (req, res) => {
@@ -19,13 +20,13 @@ module.exports.getUser = (req, res) => {
       if (!user) {
         return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
       }
-      return res.send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(ERROR_CODE).send({ message: 'Переданы некорректные данные' });
+        return res.status(ERROR_CODES).send({ message: 'Переданы некорректные данные' });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
+      res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -33,16 +34,16 @@ module.exports.createUsers = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.status(ERROR_CREATED).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(ERROR_CODE).send({ message: `Переданы некорректные данные ${err.message}` });
+        return res.status(ERROR_CODES).send({ message: `Переданы некорректные данные ${err.message}` });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
+      res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
-module.exports.putchUserProfile = (req, res) => {
+module.exports.patchUserProfile = (req, res) => {
   const { name, about } = req.body;
   const userId = req.user._id;
 
@@ -51,17 +52,17 @@ module.exports.putchUserProfile = (req, res) => {
       if (!user) {
         return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
       }
-      return res.send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return res.status(ERROR_CODE).send({ message: `Переданы некорректные данные ${err.message}` });
+        return res.status(ERROR_CODES).send({ message: `Переданы некорректные данные ${err.message}` });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
+      res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
-module.exports.putchUserAvatar = (req, res) => {
+module.exports.patchUserAvatar = (req, res) => {
   const { avatar } = req.body;
   const userId = req.user._id;
 
@@ -70,12 +71,12 @@ module.exports.putchUserAvatar = (req, res) => {
       if (!user) {
         return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
       }
-      return res.send({ data: user });
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return res.status(ERROR_CODE).send({ message: `Переданы некорректные данные ${err.message}` });
+        return res.status(ERROR_CODES).send({ message: `Переданы некорректные данные ${err.message}` });
       }
-      return res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
+      res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
 };
