@@ -1,11 +1,11 @@
 const User = require('../models/user');
 
 const {
-  ERROR_CODES,
+  BAD_REQUEST,
   NOT_FOUND,
   ERROR_DEFAULT,
   ERROR_CREATED,
-} = require('../utils/error');
+} = require('../utils/error-codes');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -18,13 +18,15 @@ module.exports.getUser = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        return;
       }
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(ERROR_CODES).send({ message: 'Переданы некорректные данные' });
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+        return;
       }
       res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
@@ -37,7 +39,8 @@ module.exports.createUsers = (req, res) => {
     .then((user) => res.status(ERROR_CREATED).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(ERROR_CODES).send({ message: `Переданы некорректные данные ${err.message}` });
+        res.status(BAD_REQUEST).send({ message: `Переданы некорректные данные ${err.message}` });
+        return;
       }
       res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
@@ -50,13 +53,15 @@ module.exports.patchUserProfile = (req, res) => {
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        return;
       }
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return res.status(ERROR_CODES).send({ message: `Переданы некорректные данные ${err.message}` });
+        res.status(BAD_REQUEST).send({ message: `Переданы некорректные данные ${err.message}` });
+        return;
       }
       res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
@@ -69,13 +74,15 @@ module.exports.patchUserAvatar = (req, res) => {
   User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        return res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        res.status(NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден' });
+        return;
       }
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        return res.status(ERROR_CODES).send({ message: `Переданы некорректные данные ${err.message}` });
+        res.status(BAD_REQUEST).send({ message: `Переданы некорректные данные ${err.message}` });
+        return;
       }
       res.status(ERROR_DEFAULT).send({ message: 'На сервере произошла ошибка' });
     });
