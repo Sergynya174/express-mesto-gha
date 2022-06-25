@@ -1,11 +1,21 @@
-const BAD_REQUEST = 400;
-const NOT_FOUND = 404;
-const ERROR_DEFAULT = 500;
-const ERROR_CREATED = 201;
+const putError = (err, req, res, next) => {
+  if (err.statusCode) {
+    return res
+      .status(err.statusCode)
+      .send({ message: err.message || 'Что-то пошло не так' });
+  }
+  res.status(500).send({ message: 'Ошибка сервера' });
+  return next(err);
+};
+
+const validateURL = (value) => {
+  if (value !== value.match(/^https?:\/\/(www\.)?[a-zA-Z\d-]+\.[\w\d\-.~:/?#[\]@!$&'()*+,;=]{2,}#?$/).join('')) {
+    throw new Error('Неверный формат ссылки');
+  }
+  return value;
+};
 
 module.exports = {
-  BAD_REQUEST,
-  NOT_FOUND,
-  ERROR_DEFAULT,
-  ERROR_CREATED,
+  putError,
+  validateURL,
 };

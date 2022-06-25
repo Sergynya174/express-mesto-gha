@@ -4,13 +4,13 @@ const cardSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Поле "name" должно быть заполнено'],
-      minlength: [2, 'Текст должен быть не короче 2 символов'],
-      maxlength: [30, 'Текст должен быть не длиннее 30 символов'],
+      required: true,
+      minlength: 2,
+      maxlength: 30,
     },
     link: {
       type: String,
-      required: [true, 'Поле "link" должно быть заполнено'],
+      required: true,
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
