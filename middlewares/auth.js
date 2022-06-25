@@ -7,7 +7,7 @@ const genToken = (payload) => jwt.sign(payload, secretCode, { expiresIn: '7d' })
 const Authorized = (req, res, next) => {
   const auth = req.headers.authorization;
 
-  if (!auth) {
+  if (!auth || !auth.startsWith('Bearer ')) {
     throw new AuthError('Необходима авторизация');
   }
   const token = auth.replace('Bearer ', '');
