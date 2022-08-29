@@ -18,7 +18,6 @@
 
 ```
 git clone https://github.com/Sergynya174/mesto-react.git
-cd express-mesto-gha
 npm run start — запускает сервер   
 npm run dev — запускает сервер с hot-reload
 
