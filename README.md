@@ -14,7 +14,13 @@
 
 ### Запуск проекта
 
-`npm run start` — запускает сервер   
-`npm run dev` — запускает сервер с hot-reload
+## Инструкция по установке
+
+```
+git clone https://github.com/Sergynya174/mesto-react.git
+npm run start — запускает сервер   
+npm run dev — запускает сервер с hot-reload
+
+```
 
 ### [Ссылка проекта](https://github.com/Sergynya174/express-mesto-gha)
